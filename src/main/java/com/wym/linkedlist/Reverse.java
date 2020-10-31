@@ -44,9 +44,7 @@ public class Reverse {
             current = next; //current指针后移
         }
 
-        if(pre != null) {
-            showNodes(pre);
-        }
+        showNodes(pre);
     }
 
     private static void showNodes(Node head) {
