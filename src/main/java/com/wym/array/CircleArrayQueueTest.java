@@ -111,11 +111,15 @@ class CircleArrayQueue {
         return val;
     }
 
+    /**
+     * 有效元素个数
+     * @return
+     */
     public int size() {
         //同样分两种情况
         //1.head索引小于tail索引, tail - head
         //2.head索引大于tail索引, (tail - head)%size
-        return (tail - head) % size;
+        return (tail - head + size) % size;
     }
 
     public void showElements() {
