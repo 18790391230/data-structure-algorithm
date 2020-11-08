@@ -137,16 +137,12 @@ class LinkedList{
         }
         System.out.println();
     }
-    public static class Node {
+    public static class Node extends AbstractNode{
 
         public Node next;
 
-        public String name;
-
-        public Integer val;
-
         public Node(Integer val) {
-            this.val = val;
+            super(val);
         }
     }
 
