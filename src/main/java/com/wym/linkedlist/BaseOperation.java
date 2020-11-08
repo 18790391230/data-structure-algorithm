@@ -61,6 +61,16 @@ class LinkedList{
     private Node head = null;
     private Node tail = null;
 
+    public int length() {
+        Node node = head;
+        int length = 0;
+        while (node != null) {
+            length++;
+            node = node.next;
+        }
+        return length;
+    }
+
     public void remove(String name) {
         if (head == null) {
             return;
@@ -96,6 +106,10 @@ class LinkedList{
         }
     }
 
+    public Node getHead() {
+        return head;
+    }
+
     public void add(Node node) {
         if (head == null) {
             head = tail = node;
@@ -125,7 +139,7 @@ class LinkedList{
     }
     public static class Node {
 
-        private Node next;
+        public Node next;
 
         public String name;
 
