@@ -92,7 +92,6 @@ class CircleLinkedList {
                 list.add(tmpNode);
                 num = 0;
             }else {
-//            tmpNode.next = null;
                 prev = prev.next;
             }
             tmpNode = tmpNode.next;
