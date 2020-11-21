@@ -9,7 +9,8 @@ public class InsertSort {
         int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1, -2};
 
         for (int i = 1; i < arr.length; i++) {
-            doSort(arr, i);
+//            doSort(arr, i);
+            doSort2(arr, i);
         }
 
         System.out.println(Arrays.toString(arr));
@@ -28,5 +29,16 @@ public class InsertSort {
             }
             maxIndex--;
         }
+    }
+
+    private static void doSort2(int[] arr, int index) {
+
+        int insertVal = arr[index];
+        int i = index;
+        while (i - 1 >= 0 && insertVal > arr[i - 1]) {
+            arr[i] = arr[i - 1];
+            i--;
+        }
+        arr[i] = insertVal;
     }
 }
