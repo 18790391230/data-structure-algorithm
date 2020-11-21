@@ -4,17 +4,20 @@ import java.util.Arrays;
 
 public class ShellSort {
 
+    private static final int COUNT = 80000;
 
     public static void main(String[] args) {
 
-        int[] arr = new int[10];
+        int[] arr = new int[COUNT];
         int index = 0;
-        for (int i = 10; i > 0; i--) {
+        for (int i = COUNT; i > 0; i--) {
             arr[index++] = i;
         }
+        long startTime = System.currentTimeMillis();
 //        swap(arr);
 
         move(arr);
+        System.out.println("排序耗时：" + (System.currentTimeMillis() - startTime));
     }
 
     private static void move(int[] arr) {
