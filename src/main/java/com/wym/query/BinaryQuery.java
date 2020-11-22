@@ -26,7 +26,7 @@ public class BinaryQuery {
 
     private static int binaryQuery(int[] arr, int start, int end, int target) {
 
-        if (start >= end) {
+        if (start > end) {
             return -1;
         }
         int mid = start + (end - start) / 2;
