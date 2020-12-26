@@ -23,7 +23,8 @@ public class HeapSort {
 
         //1. 将数据构造成一个大顶堆
         for (int i = arr.length / 2 + 1; i >= 0 ; i--) {
-            adjustTree(arr, i, arr.length);
+//            mothod1(arr, i, arr.length);
+            mothod2(arr, i, arr.length);
         }
 
         for (int i = arr.length - 1; i > 0; i--) {
@@ -33,12 +34,41 @@ public class HeapSort {
             arr[i] = temp;
 
             //3. 重新调整堆，使其满足大顶堆定义
-            adjustTree(arr, 0, i);
+//            mothod1(arr, 0, i);
+            mothod2(arr, 0, i);
         }
 
         System.out.println("排序结果：");
         System.out.println(Arrays.toString(arr));
     }
+
+    private static void mothod2(int[] arr, int index, int i) {
+        int temp = arr[index];
+        int targetIndex = adjustTreeByRecursion(arr, index, temp, i);
+        arr[targetIndex] = temp;
+    }
+
+    private static void mothod1(int[] arr, int index, int i) {
+        adjustTree(arr, index, i);
+    }
+
+    private static int adjustTreeByRecursion(int[] arr, int index, int temp, int length) {
+
+        int i = 2 * index + 1;
+        if (i >= length) {
+            return index;
+        }
+        if (i + 1 < length && arr[i] < arr[i + 1]) {
+            i++;
+        }
+        if (temp < arr[i]) {
+            arr[index] = arr[i];
+            //递归调整
+            return adjustTreeByRecursion(arr, i, temp, length);
+        }
+        return index;
+    }
+
 
     private static void adjustTree(int[] arr, int index, int length) {
 
