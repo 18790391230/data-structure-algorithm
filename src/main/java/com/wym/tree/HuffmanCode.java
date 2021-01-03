@@ -1,5 +1,9 @@
 package com.wym.tree;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 /**
@@ -11,13 +15,125 @@ import java.util.*;
  */
 public class HuffmanCode {
 
-    public static void main(String[] args) {
+    private static Map<Byte, String> codeMap = new HashMap<>();
 
-        //1.给定一个字符串，转为字节数组
-        String source = "i like like like java do you like a java";
-        byte[] contentBytes = source.getBytes();
+    public static void main(String[] args) throws Exception {
+        zipFile();
+
+        unzipFile();
+    }
+
+    private static void unzipFile()throws Exception {
+
+        String srcPath = "D:\\core.zip";
+        String destPath = "D:\\corebak.yaml";
+        try (FileInputStream fis = new FileInputStream(srcPath)) {
+            try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                //读取压缩文件数据部分
+                byte[] huffmanBytes = (byte[]) ois.readObject();
+
+                //读取编码映射
+                Map<Byte, String> huffmanCodeMap = (Map<Byte, String>) ois.readObject();
+
+                //解码
+                byte[] srcBytes = decode(huffmanBytes, huffmanCodeMap);
+
+                //写入文件
+                try(final FileOutputStream fos = new FileOutputStream(destPath)) {
+                    fos.write(srcBytes);
+                }
+            }
+
+
+
+        }
+
+    }
+
+    private static byte[] decode(byte[] huffmanBytes, Map<Byte, String> huffmanCodeMap) {
+
+        //Byte转bit
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < huffmanBytes.length - 1; i++) {
+            sb.append(byte2BitString(true, huffmanBytes[i]));
+        }
+        sb.append(byte2BitString(false, huffmanBytes[huffmanBytes.length - 1]));
+
+        //翻转map
+        Map<String, Byte> map = new HashMap<>();
+        for (Map.Entry<Byte, String> entry : huffmanCodeMap.entrySet()) {
+            map.put(entry.getValue(), entry.getKey());
+        }
+
+        //解码数据
+        List<Byte> list = new ArrayList<>();
+        int index = 0;
+        Byte val = null;
+        for (int i = 0; i < sb.length(); i++) {
+            final String key = sb.substring(index, i + 1);
+            if ((val = map.get(key)) != null) {
+                list.add(val);
+                index = i + 1;
+            }
+        }
+        byte[] rtnByte = new byte[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            rtnByte[i] = list.get(i);
+        }
+
+        return rtnByte;
+    }
+
+    private static String byte2BitString(boolean b, byte huffmanByte) {
+
+        int temp = huffmanByte;
+        if (b) {
+            temp |= 256;
+        }
+        final String str = Integer.toBinaryString(temp);
+        if (b) {
+            return str.substring(str.length() - 8);
+        }
+
+        return str;
+    }
+
+    private static void zipFile() throws Exception {
+
+        String srcPath = "D:\\core.yaml";
+        String destPath = "D:\\core.zip";
+        try (FileInputStream fis = new FileInputStream(srcPath)) {
+            //读取数据
+            final byte[] bytes = new byte[fis.available()];
+            fis.read(bytes);
+
+            //压缩
+            byte[] huffmanCodeBytes = doZip(bytes);
+
+            //压缩后数据写入文件
+            try (final FileOutputStream fos = new FileOutputStream(destPath)) {
+
+                try(ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+
+                    oos.writeObject(huffmanCodeBytes);
+
+                    //编码规则写入文件
+                    oos.writeObject(codeMap);
+                }
+            }
+
+        }
+        System.out.println("压缩成功");
+    }
+
+
+    private static byte[] doZip(byte[] contentBytes) {
+//        //1.给定一个字符串，转为字节数组
+//        String source = "i like like like java do you like a java";
+//        byte[] contentBytes = source.getBytes();
 
         //2.计算字符串中每个字符出现的次数
+
         Map<Byte, Integer> map = new HashMap<>();
         for (byte b : contentBytes) {
             Integer val = map.putIfAbsent(b, 1);
@@ -32,14 +148,11 @@ public class HuffmanCode {
         root.preOrder();
 
         //4.根据霍夫曼树计算每个叶子节点的路径，向左是0，向右是1
-        Map<Byte, String> codeMap = new HashMap<>();
         buildCodeMap(root, codeMap, "", "");
         System.out.println(codeMap);
 
         //5.遍历字节数组，根据上一步得到的霍夫曼编码进行转换
-        byte[] huffmanCodeBytes = buildHuffmanCodes(contentBytes, codeMap);
-
-        System.out.println(Arrays.toString(huffmanCodeBytes));
+        return buildHuffmanCodes(contentBytes, codeMap);
     }
 
     private static byte[] buildHuffmanCodes(byte[] contentBytes, Map<Byte, String> codeMap) {
