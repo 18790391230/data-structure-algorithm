@@ -5,29 +5,44 @@ import com.sun.xml.internal.bind.v2.model.core.EnumLeafInfo;
 /**
  * 二叉排序树
  */
-public class BinarySortTree {
+public class BinarySortTreeDemo {
 
     public static void main(String[] args) {
 
-//        int[] arr = new int[]{7, 3, 10, 12, 5, 1, 9};
+        int[] arr = new int[]{7, 3, 10, 12, 5, 1, 9, 2};
 
-        Node node7 = new Node(7);
-        Node node3 = new Node(3);
-        Node node10 = new Node(10);
-        Node node12 = new Node(12);
-        Node node5 = new Node(5);
-        Node node1 = new Node(1);
-        Node node9 = new Node(9);
+        BinarySortTree tree = new BinarySortTree();
+        for (int i = 0; i < arr.length; i++) {
+            tree.add(new Node(arr[i]));
+        }
+        tree.centerOrder();
 
-        node7.add(node3);
-        node7.add(node10);
-        node7.add(node12);
-        node7.add(node5);
-        node7.add(node1);
-        node7.add(node9);
 
-        node7.centerOrder();
     }
+
+    static class BinarySortTree{
+        private Node root;
+
+        public void add(Node node) {
+            if (node == null) {
+                return;
+            }
+            if (root == null) {
+                this.root = node;
+            } else {
+                root.add(node);
+            }
+        }
+
+        public void centerOrder() {
+
+            if (root == null) {
+                return;
+            }
+            root.centerOrder();
+        }
+    }
+
 
     static class Node{
         private int value;
