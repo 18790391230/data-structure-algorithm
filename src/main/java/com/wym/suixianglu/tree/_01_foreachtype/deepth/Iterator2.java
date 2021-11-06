@@ -9,7 +9,7 @@ public class Iterator2 {
 
     public static void main(String[] args) {
 
-        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
+        Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8};
         Recurse.TreeNode<Integer> root = Recurse.generateTree(arr);
 
         List<Integer> result = new ArrayList<>();

@@ -11,7 +11,7 @@ public class Recurse {
 
     public static void main(String[] args) {
 
-        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
+        Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8};
         TreeNode<Integer> root = generateTree(arr);
 
         List<Integer> result = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Recurse {
 
     }
 
-    public static TreeNode<Integer> generateTree(int[] arr) {
+    public static TreeNode<Integer> generateTree(Integer[] arr) {
 
         TreeNode<Integer> root = new TreeNode<>(arr[0], null, null);
 
@@ -63,16 +63,21 @@ public class Recurse {
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 TreeNode<Integer> node = queue.poll();
-                if (node == null) {
-                    return root;
+                if (startIndex < arr.length) {
+                    if (arr[startIndex] != null) {
+                        node.left = new TreeNode<>(arr[startIndex++], null, null);
+                        queue.add(node.left);
+                    } else {
+                        startIndex++;
+                    }
                 }
                 if (startIndex < arr.length) {
-                    node.left = new TreeNode<>(arr[startIndex++], null, null);
-                    queue.add(node.left);
-                }
-                if (startIndex < arr.length) {
-                    node.right = new TreeNode<>(arr[startIndex++], null, null);
-                    queue.add(node.right);
+                    if (arr[startIndex] != null) {
+                        node.right = new TreeNode<>(arr[startIndex++], null, null);
+                        queue.add(node.right);
+                    } else {
+                        startIndex++;
+                    }
                 }
             }
         }
@@ -85,6 +90,7 @@ public class Recurse {
         public T value;
         public TreeNode<T> left;
         public TreeNode<T> right;
+        public TreeNode<T> next;
 
         public TreeNode(T value, TreeNode<T> left, TreeNode<T> right) {
             this.value = value;
