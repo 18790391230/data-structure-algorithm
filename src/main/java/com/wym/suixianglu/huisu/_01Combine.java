@@ -36,7 +36,7 @@ public class _01Combine {
             result.add(new ArrayList<>(list));
             return;
         }
-        for(int i = startIndex; i <= n; i++){
+        for(int i = startIndex; i <= n - (k - list.size()) + 1; i++){
             list.add(i);
             combine(n, k, i + 1);
             list.removeLast();
