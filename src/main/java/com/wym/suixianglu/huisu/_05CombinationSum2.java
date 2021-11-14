@@ -43,11 +43,8 @@ public class _05CombinationSum2 {
             result.add(new ArrayList<>(list));
             return;
         }
-        if(sum > target){
-            return;
-        }
-        for(int i = startIndex; i < candidates.length; i++){
-            if(i > 0 && candidates[i] == candidates[i - 1] && i > startIndex){
+        for(int i = startIndex; i < candidates.length && sum + candidates[i] <= target; i++){
+            if(i > startIndex && candidates[i] == candidates[i - 1]){
                 continue;
             }
             list.add(candidates[i]);
